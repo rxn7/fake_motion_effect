@@ -22,4 +22,7 @@ window.addEventListener('keypress', (e) => {
         freeze = !freeze;
     }
 });
+window.addEventListener('mousedown', (e) => {
+    freeze = !freeze;
+});
 init();
