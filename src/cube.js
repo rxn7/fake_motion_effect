@@ -38,7 +38,7 @@ export default class Cube {
         for (const connection of this.connections) {
             const a = this.vertices[connection.a];
             const b = this.vertices[connection.b];
-            Renderer.invertLine(a[0], a[1], b[0], b[1]);
+            Renderer.drawLine(a[0], a[1], b[0], b[1]);
         }
     }
     initVertices() {
