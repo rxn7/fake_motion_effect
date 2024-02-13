@@ -28,4 +28,8 @@ window.addEventListener('keypress', (e: KeyboardEvent) => {
 	}
 })
 
+window.addEventListener('mousedown', (e: MouseEvent) => {
+	freeze = !freeze
+})
+
 init()
