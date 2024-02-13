@@ -1,4 +1,3 @@
-import { ctx } from './global.js'
 import { Point } from './point.js'
 import { Renderer } from './renderer.js'
 import { Vector3 } from './vector3.js'
@@ -47,7 +46,7 @@ export default class Cube {
 		for (const connection of this.connections) {
 			const a: Vector3 = this.vertices[connection.a]
 			const b: Vector3 = this.vertices[connection.b]
-			Renderer.invertLine(a[0], a[1], b[0], b[1])
+			Renderer.drawLine(a[0], a[1], b[0], b[1])
 		}
 	}
 
