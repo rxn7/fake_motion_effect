@@ -1,5 +1,5 @@
 import { canvas, ctx } from './global.js';
-import { Options } from './options.js';
+import { RenderColors, Options } from './options.js';
 export var Renderer;
 (function (Renderer) {
     const screenBuffer = ctx.createImageData(canvas.width, canvas.height);
@@ -13,31 +13,62 @@ export var Renderer;
         renderScreenBuffer();
     }
     Renderer.render = render;
-    function drawLine(x1, y1, x2, y2) {
-        const dx = x2 - x1;
-        const dy = y2 - y1;
-        const length = Math.sqrt(dx * dx + dy * dy);
-        const angle = Math.atan2(dy, dx);
-        const angleCos = Math.cos(angle);
-        const angleSin = Math.sin(angle);
-        for (let i = 0; i < length; ++i) {
-            drawPixel(Math.round(x1 + angleCos * i), Math.round(y1 + angleSin * i));
+    function begin() {
+        if (!Options.isEffectEnabled) {
+            clear();
+        }
+    }
+    Renderer.begin = begin;
+    function clear() {
+        screenBuffer.data.fill(255);
+    }
+    Renderer.clear = clear;
+    function drawLine(x0, y0, x1, y1) {
+        x0 = Math.floor(x0);
+        x1 = Math.floor(x1);
+        y0 = Math.floor(y0);
+        y1 = Math.floor(y1);
+        let dx = Math.abs(x1 - x0);
+        let dy = Math.abs(y1 - y0);
+        let sx = (x0 < x1) ? 1 : -1;
+        let sy = (y0 < y1) ? 1 : -1;
+        let err = dx - dy;
+        drawPixel(x0, y0);
+        while (!((x0 == x1) && (y0 == y1))) {
+            const err2 = err * 2;
+            if (err2 > -dy) {
+                err -= dy;
+                x0 += sx;
+            }
+            if (err2 < dx) {
+                err += dx;
+                y0 += sy;
+            }
+            drawPixel(x0, y0);
         }
     }
     Renderer.drawLine = drawLine;
     function drawPixel(x, y) {
+        if (x < 0 || x >= canvas.width || y < 0 || y >= canvas.height) {
+            console.warn("Tried to draw outside the canvas");
+            return;
+        }
         const idx = y * canvas.width + x;
+        if (!Options.isEffectEnabled) {
+            screenBuffer.data.set([0, 0, 0, 255], idx * 4);
+            return;
+        }
         switch (Options.renderColors) {
-            case Options.RenderColors.BlackAndWhite:
+            case RenderColors.BlackAndWhite:
                 renderBlackAndWhite(idx);
                 break;
-            case Options.RenderColors.RedAndBlue:
+            case RenderColors.RedAndBlue:
                 renderRedAndBlue(idx);
                 break;
-            case Options.RenderColors.RedAndGreen:
+            case RenderColors.RedAndGreen:
                 renderRedAndGreen(idx);
                 break;
-            case Options.RenderColors.RGB:
+            case RenderColors.RGB:
                 renderRGB(idx);
                 break;
         }

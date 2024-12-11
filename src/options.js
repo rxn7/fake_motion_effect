@@ -1,28 +1,49 @@
+import { changeShape } from "./index.js";
+import { Renderer } from "./renderer.js";
+export var RenderColors;
+(function (RenderColors) {
+    RenderColors[RenderColors["BlackAndWhite"] = 0] = "BlackAndWhite";
+    RenderColors[RenderColors["RedAndBlue"] = 1] = "RedAndBlue";
+    RenderColors[RenderColors["RedAndGreen"] = 2] = "RedAndGreen";
+    RenderColors[RenderColors["RGB"] = 3] = "RGB";
+})(RenderColors || (RenderColors = {}));
+export var ShapeOption;
+(function (ShapeOption) {
+    ShapeOption[ShapeOption["Cube"] = 0] = "Cube";
+    ShapeOption[ShapeOption["Pyramid"] = 1] = "Pyramid";
+    ShapeOption[ShapeOption["Cylinder"] = 2] = "Cylinder";
+    ShapeOption[ShapeOption["Cone"] = 3] = "Cone";
+    ShapeOption[ShapeOption["Sphere"] = 4] = "Sphere";
+})(ShapeOption || (ShapeOption = {}));
 export var Options;
 (function (Options) {
-    let RenderColors;
-    (function (RenderColors) {
-        RenderColors[RenderColors["BlackAndWhite"] = 0] = "BlackAndWhite";
-        RenderColors[RenderColors["RedAndBlue"] = 1] = "RedAndBlue";
-        RenderColors[RenderColors["RedAndGreen"] = 2] = "RedAndGreen";
-        RenderColors[RenderColors["RGB"] = 3] = "RGB";
-    })(RenderColors = Options.RenderColors || (Options.RenderColors = {}));
     Options.isPlaying = true;
+    Options.isEffectEnabled = true;
     Options.speed = 0.05;
     Options.renderColors = RenderColors.BlackAndWhite;
     function init() {
+        const clearButton = document.getElementById('button-clear');
+        clearButton.addEventListener('click', Renderer.clear);
         const playingInput = document.getElementById('input-playing');
-        playingInput.addEventListener('change', () => {
-            Options.isPlaying = playingInput.checked;
-        });
+        const updateIsPlaying = () => Options.isPlaying = playingInput.checked;
+        playingInput.addEventListener('change', updateIsPlaying);
+        updateIsPlaying();
         const speedInput = document.getElementById('input-speed');
-        speedInput.addEventListener('change', () => {
-            Options.speed = speedInput.valueAsNumber;
-        });
+        const updateSpeed = () => Options.speed = speedInput.valueAsNumber;
+        speedInput.addEventListener('change', updateSpeed);
+        updateSpeed();
         const colorsInput = document.getElementById('input-colors');
-        colorsInput.addEventListener('change', () => {
-            Options.renderColors = colorsInput.selectedIndex;
-        });
+        const updateColors = () => Options.renderColors = colorsInput.selectedIndex;
+        colorsInput.addEventListener('change', updateColors);
+        updateColors();
+        const shapeInput = document.getElementById('input-shape');
+        const updateShape = () => changeShape(shapeInput.selectedIndex);
+        shapeInput.addEventListener('change', updateShape);
+        updateShape();
+        const effectInput = document.getElementById('input-effect');
+        const updateEffect = () => Options.isEffectEnabled = effectInput.checked;
+        effectInput.addEventListener('change', updateEffect);
+        updateEffect();
     }
     Options.init = init;
 })(Options || (Options = {}));

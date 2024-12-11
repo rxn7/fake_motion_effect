@@ -1,8 +1,8 @@
-import { Shape } from './shape.js';
-import { Vector3 } from './vector3.js';
+import { Shape } from '../shape.js';
+import { Vector3 } from '../vector3.js';
 export default class Cube extends Shape {
     constructor(origin, size = 20) {
-        super(origin, size);
+        super(origin);
         this.vertices = new Array(8);
         this.centroid = new Vector3();
         this.connections = [
@@ -19,7 +19,7 @@ export default class Cube extends Shape {
             { a: 6, b: 7 },
             { a: 7, b: 4 },
         ];
-        const halfSize = this.size * 0.5;
+        const halfSize = size * 0.5;
         for (let i = 0; i < 2; ++i) {
             const z = -halfSize + halfSize * i * 2;
             const idxOffset = i * 4;
