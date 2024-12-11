@@ -1,7 +1,7 @@
 import { Shape } from '../shape.js';
 import { Vector3 } from '../vector3.js';
 export default class Sphere extends Shape {
-    constructor(origin, radius = 32, segments = 16) {
+    constructor(origin, radius = 32, segments = 32) {
         super(origin);
         this.radius = radius;
         this.segments = segments;

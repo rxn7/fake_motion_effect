@@ -6,6 +6,7 @@ import Cube from './shapes/cube.js';
 import Cylinder from './shapes/cylinder.js';
 import Cone from './shapes/cone.js';
 import Sphere from './shapes/sphere.js';
+import Torus from './shapes/torus.js';
 let lastFrameTime = 0;
 let shape = new Cube({ x: 128, y: 128 }, 128);
 function init() {
@@ -40,7 +41,10 @@ export function changeShape(option) {
             shape = new Cone({ x: 128, y: 128 });
             break;
         case ShapeOption.Sphere:
-            shape = new Sphere({ x: 128, y: 128 }, 128);
+            shape = new Sphere({ x: 128, y: 128 }, 86);
+            break;
+        case ShapeOption.Torus:
+            shape = new Torus({ x: 128, y: 128 });
             break;
     }
 }

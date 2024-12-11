@@ -89,9 +89,24 @@ export var Renderer;
         screenBuffer.data.set([255 * (1 - colorOffset), 255 * colorOffset, 0], idx * 4);
     }
     function renderRGB(idx) {
-        screenBuffer.data.set([Math.random() * 255, Math.random() * 255, Math.random() * 255], idx * 4);
+        if (isWhite(idx)) {
+            screenBuffer.data.set([Math.random() * 255, Math.random() * 255, Math.random() * 255], idx * 4);
+            return;
+        }
+        for (let i = 0; i < 3; ++i) {
+            const value = screenBuffer.data[idx * 4 + i];
+            screenBuffer.data[idx * 4 + i] = 255 - value;
+        }
     }
     function renderScreenBuffer() {
         ctx.putImageData(screenBuffer, 0, 0);
+    }
+    function isWhite(idx) {
+        for (let i = 0; i < 3; ++i) {
+            if (screenBuffer.data[idx * 4 + i] != 0) {
+                return false;
+            }
+        }
+        return true;
     }
 })(Renderer || (Renderer = {}));
