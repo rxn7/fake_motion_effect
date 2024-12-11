@@ -24,7 +24,7 @@ export namespace Options {
 	
 	export function init(): void {
 		const clearButton = document.getElementById('button-clear') as HTMLButtonElement
-		clearButton.addEventListener('click', () => Renderer.clear)
+		clearButton.addEventListener('click', Renderer.clear)
 
 		const playingInput = document.getElementById('input-playing') as HTMLInputElement
 		const updateIsPlaying = () => isPlaying = playingInput.checked
