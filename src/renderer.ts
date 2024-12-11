@@ -5,8 +5,6 @@ export namespace Renderer {
 	const screenBuffer: ImageData = ctx.createImageData(canvas.width, canvas.height)
 
 	export function init(): void {
-		ctx.imageSmoothingEnabled = true
-		ctx.imageSmoothingQuality = "high"
 		for(let i: number = 1; i < screenBuffer.width * screenBuffer.height; ++i) {
 			screenBuffer.data.set([255, 255, 255, 255], i * 4)
 		}
