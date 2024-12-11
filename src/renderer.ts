@@ -1,15 +1,12 @@
 import { canvas, ctx } from './global.js'
+import { Options } from './options.js'
 
 export namespace Renderer {
 	const screenBuffer: ImageData = ctx.createImageData(canvas.width, canvas.height)
 
 	export function init(): void {
-		for (let i: number = 0; i < screenBuffer.width * screenBuffer.height; ++i) {
-			const idx: number = i * 4
-			for(let j: number = 0; j < 3; ++j) {
-				screenBuffer.data[idx + j] = Math.random() * 255
-			}
-			screenBuffer.data[idx + 3] = 255
+		for(let i: number = 1; i < screenBuffer.width * screenBuffer.height; ++i) {
+			screenBuffer.data.set([255, 255, 255, 255], i * 4)
 		}
 	}
 
@@ -26,16 +23,51 @@ export namespace Renderer {
 		const angleCos: number = Math.cos(angle)
 		const angleSin: number = Math.sin(angle)
 
-		for (let i: number = 0; i < length; ++i) {
+		for(let i: number = 0; i < length; ++i) {
 			drawPixel(Math.round(x1 + angleCos * i), Math.round(y1 + angleSin * i))
 		}
 	}
 
 	export function drawPixel(x: number, y: number): void {
 		const idx: number = y * canvas.width + x
-		for(let i: number = 0; i < 3; ++i) {
-			screenBuffer.data[idx * 4 + i] = Math.random() * 255
+		switch(Options.renderColors) {
+			case Options.RenderColors.BlackAndWhite:
+				renderBlackAndWhite(idx)
+				break
+
+			case Options.RenderColors.RedAndBlue:
+				renderRedAndBlue(idx)
+				break
+
+			case Options.RenderColors.RedAndGreen:
+				renderRedAndGreen(idx)
+				break
+			
+			case Options.RenderColors.RGB:
+				renderRGB(idx)
+				break
 		}
+	}
+
+	function renderBlackAndWhite(idx: number): void {
+		const isWhite = screenBuffer.data[idx * 4] == 255
+		for(let i: number = 0; i < 3; ++i) {
+			screenBuffer.data[idx * 4 + i] = isWhite ? 0 : 255
+		}
+	}
+
+	function renderRedAndBlue(idx: number): void {
+		const colorOffset = screenBuffer.data[idx * 4 + 2] == 255 ? 1 : 0
+		screenBuffer.data.set([255 * colorOffset, 0, 255 * (1 - colorOffset)], idx * 4)
+	}
+
+	function renderRedAndGreen(idx: number): void {
+		const colorOffset = screenBuffer.data[idx * 4] == 255 ? 1 : 0
+		screenBuffer.data.set([255 * (1 - colorOffset), 255 * colorOffset, 0], idx * 4)
+	}
+
+	function renderRGB(idx: number): void {
+		screenBuffer.data.set([Math.random() * 255, Math.random() * 255, Math.random() * 255], idx * 4)
 	}
 
 	function renderScreenBuffer(): void {

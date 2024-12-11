@@ -8,6 +8,7 @@ type Connection = {
 }
 
 export default class Cube {
+	public rotateSpeed: number = 0.05
 	private vertices: Vector3[] = new Array<Vector3>(8)
 	private centroid: Vector3 = new Vector3()
 	private connections: Connection[] = [
@@ -30,20 +31,23 @@ export default class Cube {
 		this.updateCentroid()
 	}
 
-	public render(): void {
+	public render(deltaTime: number): void {
 		this.updateCentroid()
 
-		for (const vertex of this.vertices) {
+		for(const vertex of this.vertices) {
 			vertex[0] -= this.centroid[0]
 			vertex[1] -= this.centroid[1]
 			vertex[2] -= this.centroid[2]
-			vertex.rotate(this.rotate[0], this.rotate[1], this.rotate[2])
+
+			const speed: number = this.rotateSpeed * deltaTime
+			vertex.rotate(this.rotate[0] * speed, this.rotate[1] * speed, this.rotate[2] * speed)
+
 			vertex[0] += this.centroid[0]
 			vertex[1] += this.centroid[1]
 			vertex[2] += this.centroid[2]
 		}
 
-		for (const connection of this.connections) {
+		for(const connection of this.connections) {
 			const a: Vector3 = this.vertices[connection.a]
 			const b: Vector3 = this.vertices[connection.b]
 			Renderer.drawLine(a[0], a[1], b[0], b[1])
@@ -53,7 +57,7 @@ export default class Cube {
 	private initVertices(): void {
 		const halfSize: number = this.size * 0.5
 
-		for (let i: number = 0; i < 2; ++i) {
+		for(let i: number = 0; i < 2; ++i) {
 			const z: number = -halfSize + halfSize * i * 2
 			const idxOffset: number = i * 4
 
@@ -66,7 +70,7 @@ export default class Cube {
 
 	private updateCentroid(): void {
 		this.centroid = new Vector3()
-		for (const vertex of this.vertices) {
+		for(const vertex of this.vertices) {
 			this.centroid[0] += vertex[0]
 			this.centroid[1] += vertex[1]
 			this.centroid[2] += vertex[2]

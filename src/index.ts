@@ -1,35 +1,31 @@
 import Cube from './cube.js'
 import { canvas, ctx } from './global.js'
+import { Options } from './options.js'
 import { Renderer } from './renderer.js'
 
-let freeze: boolean = false
-let lastFrameTime: DOMHighResTimeStamp
+let playing: boolean = true
+let lastFrameTime: DOMHighResTimeStamp = 0
 const cube = new Cube({ x: 128, y: 128 }, 128)
 
 function init(): void {
+	Options.init()
 	Renderer.init()
-	setInterval(update, 1000 / 60)
+	requestAnimationFrame(update)
 }
 
 function update(time: DOMHighResTimeStamp): void {
-	const deltaTime: number = (time - lastFrameTime) * 1000
+	requestAnimationFrame(update)
+
+	const deltaTime: number = (time - lastFrameTime)
 	lastFrameTime = time
 
-	if (!freeze) {
+	if(Options.isPlaying) {
+		cube.rotateSpeed = Options.speed
+
 		ctx.clearRect(0, 0, canvas.width, canvas.height)
-		cube.render()
+		cube.render(deltaTime)
 		Renderer.render()
 	}
 }
-
-window.addEventListener('keypress', (e: KeyboardEvent) => {
-	if (e.key == ' ') {
-		freeze = !freeze
-	}
-})
-
-window.addEventListener('mousedown', (e: MouseEvent) => {
-	freeze = !freeze
-})
 
 init()
