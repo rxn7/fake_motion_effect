@@ -13,7 +13,7 @@ export abstract class Shape {
 	protected abstract centroid: Vector3
 	protected abstract connections: Connection[]
 
-	constructor(public origin: Point, public rotateAxis: Vector3 = new Vector3(0.02, 0.01, 0.04)) { }
+	constructor(public origin: Point, public rotateAxis: Vector3 = new Vector3(0.005, 0.02, 0.01)) { }
 
 	public render(deltaTime: number): void {
 		this.updateCentroid()

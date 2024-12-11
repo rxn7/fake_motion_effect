@@ -1,16 +1,19 @@
 import { changeShape } from "./index.js"
+import { Renderer } from "./renderer.js"
 
 export enum RenderColors {
 	BlackAndWhite = 0,
-	RedAndBlue = 1,
-	RedAndGreen = 2,
-	RGB = 3,
+	RedAndBlue,
+	RedAndGreen,
+	RGB,
 }
 
 export enum ShapeOption {
 	Cube = 0,
-	Pyramid = 1,
-	Cylinder = 2,
+	Pyramid,
+	Cylinder,
+	Cone,
+	Sphere,
 }
 
 export namespace Options {
@@ -20,6 +23,9 @@ export namespace Options {
 	export let renderColors: RenderColors = RenderColors.BlackAndWhite
 	
 	export function init(): void {
+		const clearButton = document.getElementById('button-clear') as HTMLButtonElement
+		clearButton.addEventListener('click', () => Renderer.clear)
+
 		const playingInput = document.getElementById('input-playing') as HTMLInputElement
 		const updateIsPlaying = () => isPlaying = playingInput.checked
 		playingInput.addEventListener('change', updateIsPlaying)

@@ -5,6 +5,8 @@ import { Shape } from './shape.js'
 import Pyramid from './shapes/pyramid.js'
 import Cube from './shapes/cube.js'
 import Cylinder from './shapes/cylinder.js'
+import Cone from './shapes/cone.js'
+import Sphere from './shapes/sphere.js'
 
 let lastFrameTime: DOMHighResTimeStamp = 0
 let shape: Shape = new Cube({ x: 128, y: 128 }, 128)
@@ -43,6 +45,14 @@ export function changeShape(option: ShapeOption): void {
 
 		case ShapeOption.Cylinder:
 			shape = new Cylinder({ x: 128, y: 128 })
+			break
+
+		case ShapeOption.Cone:
+			shape = new Cone({ x: 128, y: 128 })
+			break
+
+		case ShapeOption.Sphere:
+			shape = new Sphere({ x: 128, y: 128 }, 128)
 			break
 	}
 }

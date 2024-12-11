@@ -16,8 +16,12 @@ export namespace Renderer {
 
 	export function begin(): void {
 		if(!Options.isEffectEnabled) {
-			screenBuffer.data.fill(255)
+			clear()
 		}
+	}
+
+	export function clear(): void {
+		screenBuffer.data.fill(255)
 	}
 
 	export function drawLine(x0: number, y0: number, x1: number, y1: number): void {
