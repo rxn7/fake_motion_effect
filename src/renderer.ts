@@ -5,6 +5,8 @@ export namespace Renderer {
 	const screenBuffer: ImageData = ctx.createImageData(canvas.width, canvas.height)
 
 	export function init(): void {
+		ctx.imageSmoothingEnabled = true
+		ctx.imageSmoothingQuality = "high"
 		for(let i: number = 1; i < screenBuffer.width * screenBuffer.height; ++i) {
 			screenBuffer.data.set([255, 255, 255, 255], i * 4)
 		}
@@ -20,17 +22,33 @@ export namespace Renderer {
 		}
 	}
 
-	export function drawLine(x1: number, y1: number, x2: number, y2: number): void {
-		const dx: number = x2 - x1
-		const dy: number = y2 - y1
+	export function drawLine(x0: number, y0: number, x1: number, y1: number): void {
+		x0 = Math.floor(x0)
+		x1 = Math.floor(x1)
+		y0 = Math.floor(y0)
+		y1 = Math.floor(y1)
+		let dx = Math.abs(x1 - x0)
+		let dy = Math.abs(y1 - y0)
+		let sx = (x0 < x1) ? 1 : -1
+		let sy = (y0 < y1) ? 1 : -1
+		let err = dx - dy
 
-		const length: number = Math.sqrt(dx * dx + dy * dy)
-		const angle: number = Math.atan2(dy, dx)
-		const angleCos: number = Math.cos(angle)
-		const angleSin: number = Math.sin(angle)
+		drawPixel(x0, y0)
 
-		for(let i: number = 0; i < length; ++i) {
-			drawPixel(Math.round(x1 + angleCos * i), Math.round(y1 + angleSin * i))
+		while(!((x0 == x1) && (y0 == y1))) {
+			const err2 = err * 2
+
+			if(err2 > -dy) {
+				err -= dy
+				x0 += sx
+			}
+
+			if(err2 < dx) {
+				err += dx
+				y0 += sy
+			}
+
+			drawPixel(x0, y0)
 		}
 	}
 
@@ -41,13 +59,18 @@ export namespace Renderer {
 		}
 
 		const idx: number = y * canvas.width + x
+
+		if(!Options.isEffectEnabled) {
+			screenBuffer.data.set([0, 0, 0, 255], idx * 4)
+			return
+		}
+
 		switch(Options.renderColors) {
 			case RenderColors.BlackAndWhite:
 				renderBlackAndWhite(idx)
 				break
 
 			case RenderColors.RedAndBlue:
-				renderRedAndBlue(idx)
 				break
 
 			case RenderColors.RedAndGreen:

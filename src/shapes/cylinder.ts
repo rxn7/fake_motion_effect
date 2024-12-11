@@ -7,7 +7,7 @@ export default class Cylinder extends Shape {
 	protected override centroid: Vector3 = new Vector3()
 	protected override connections: Connection[] = []
 
-	constructor(origin: Point, radius: number = 16, height: number = 256, segments: number = 32) {
+	constructor(origin: Point, radius: number = 16, height: number = 256, segments: number = 12) {
 		super(origin)
 		this.vertices = new Array<Vector3>(segments * 2)
 
