@@ -104,10 +104,28 @@ export namespace Renderer {
 	}
 
 	function renderRGB(idx: number): void {
-		screenBuffer.data.set([Math.random() * 255, Math.random() * 255, Math.random() * 255], idx * 4)
+		if(isWhite(idx)) {
+			screenBuffer.data.set([Math.random() * 255, Math.random() * 255, Math.random() * 255], idx * 4)
+			return
+		}
+
+		for(let i: number = 0; i < 3; ++i) {
+			const value = screenBuffer.data[idx * 4 + i]
+			screenBuffer.data[idx * 4 + i] = 255 - value
+		}
 	}
 
 	function renderScreenBuffer(): void {
 		ctx.putImageData(screenBuffer, 0, 0)
+	}
+
+	function isWhite(idx: number): boolean {
+		for(let i: number = 0; i < 3; ++i) {
+			if(screenBuffer.data[idx * 4 + i] != 0) {
+				return false
+			}
+		}
+
+		return true
 	}
 }

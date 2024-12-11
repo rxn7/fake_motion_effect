@@ -8,7 +8,7 @@ export default class Sphere extends Shape {
 	protected override connections: Connection[]
 	private rings: number
 
-	constructor(origin: Point, private radius: number = 32, private segments: number = 16) {
+	constructor(origin: Point, private radius: number = 32, private segments: number = 32) {
 		super(origin)
 		this.rings = this.segments / 2
 		this.vertices = new Array<Vector3>((this.segments + 1) * (this.rings + 1))

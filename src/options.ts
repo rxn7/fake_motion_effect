@@ -9,11 +9,12 @@ export enum RenderColors {
 }
 
 export enum ShapeOption {
-	Cube = 0,
+	Cube,
 	Pyramid,
 	Cylinder,
 	Cone,
 	Sphere,
+	Torus
 }
 
 export namespace Options {
@@ -44,11 +45,24 @@ export namespace Options {
 		const shapeInput = document.getElementById('input-shape') as HTMLSelectElement
 		const updateShape = () => changeShape(shapeInput.selectedIndex as ShapeOption)
 		shapeInput.addEventListener('change', updateShape)
+		addShapeOptions(shapeInput)
 		updateShape()
 
 		const effectInput = document.getElementById('input-effect') as HTMLInputElement
 		const updateEffect = () => isEffectEnabled = effectInput.checked
 		effectInput.addEventListener('change', updateEffect)
 		updateEffect()
+	}
+
+	function addShapeOptions(shapeInput: HTMLSelectElement): void {
+		for(const shape of Object.keys(ShapeOption)) {
+			if(!isNaN(+shape)) continue // skip numbers
+			console.log(shape)
+
+			const option = document.createElement('option')
+			option.value = shape.toString()
+			option.innerText = shape.toString()
+			shapeInput.appendChild(option)
+		}
 	}
 }
