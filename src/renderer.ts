@@ -69,6 +69,7 @@ export namespace Renderer {
 				break
 
 			case RenderColors.RedAndBlue:
+				renderRedAndBlue(idx)
 				break
 
 			case RenderColors.RedAndGreen:

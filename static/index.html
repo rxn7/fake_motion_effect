@@ -8,6 +8,10 @@
 	</head>
 
 	<body>
+		<div id="canvas-container">
+			<canvas id="canvas" width="256" height="256"></canvas>
+		</div>
+
 		<div id="options-container">
 			<div>
 				playing:
@@ -17,16 +21,6 @@
 			<div>
 				speed:
 				<input type="range" min="0.001" max="0.1" value="0.05" step="0.001" id="input-speed" />
-			</div>
-
-			<div>
-				colors:
-				<select id="input-colors" se>
-					<option value="0" selected="true">Black & White</option>
-					<option value="1" selected="true">Red & Blue</option>
-					<option value="2">Red & Green</option>
-					<option value="3">RGB</option>
-				</select>
 			</div>
 
 			<div>
@@ -42,10 +36,16 @@
 				effect:
 				<input type="checkbox" id="input-effect" checked="true" />
 			</div>
-		</div>
 
-		<div id="canvas-container">
-			<canvas id="canvas" width="256" height="256"></canvas>
+			<div>
+				effect colors:
+				<select id="input-colors" se>
+					<option value="0" selected="true">Black & White</option>
+					<option value="1" selected="true">Red & Blue</option>
+					<option value="2">Red & Green</option>
+					<option value="3">RGB</option>
+				</select>
+			</div>
 		</div>
 	</body>
 

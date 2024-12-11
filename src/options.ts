@@ -21,29 +21,28 @@ export namespace Options {
 	
 	export function init(): void {
 		const playingInput = document.getElementById('input-playing') as HTMLInputElement
-
 		const updateIsPlaying = () => isPlaying = playingInput.checked
-		updateIsPlaying()
 		playingInput.addEventListener('change', updateIsPlaying)
+		updateIsPlaying()
 
 		const speedInput = document.getElementById('input-speed') as HTMLInputElement
-		speedInput.addEventListener('change', () => {
-			speed = speedInput.valueAsNumber
-		})
+		const updateSpeed = () => speed = speedInput.valueAsNumber
+		speedInput.addEventListener('change', updateSpeed)
+		updateSpeed()
 
 		const colorsInput = document.getElementById('input-colors') as HTMLSelectElement
-		colorsInput.addEventListener('change', () => {
-			renderColors = colorsInput.selectedIndex as RenderColors
-		})
+		const updateColors = () => renderColors = colorsInput.selectedIndex as RenderColors
+		colorsInput.addEventListener('change', updateColors)
+		updateColors()
 
 		const shapeInput = document.getElementById('input-shape') as HTMLSelectElement
-		shapeInput.addEventListener('change', () => {
-			changeShape(shapeInput.selectedIndex as ShapeOption)
-		})
+		const updateShape = () => changeShape(shapeInput.selectedIndex as ShapeOption)
+		shapeInput.addEventListener('change', updateShape)
+		updateShape()
 
 		const effectInput = document.getElementById('input-effect') as HTMLInputElement
-		effectInput.addEventListener('change', () => {
-			isEffectEnabled = effectInput.checked
-		})
+		const updateEffect = () => isEffectEnabled = effectInput.checked
+		effectInput.addEventListener('change', updateEffect)
+		updateEffect()
 	}
 }
