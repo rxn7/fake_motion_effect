@@ -1,14 +1,11 @@
 import { canvas, ctx } from './global.js';
+import { Options } from './options.js';
 export var Renderer;
 (function (Renderer) {
     const screenBuffer = ctx.createImageData(canvas.width, canvas.height);
     function init() {
-        for (let i = 0; i < screenBuffer.width * screenBuffer.height; ++i) {
-            const idx = i * 4;
-            for (let j = 0; j < 3; ++j) {
-                screenBuffer.data[idx + j] = Math.random() * 255;
-            }
-            screenBuffer.data[idx + 3] = 255;
+        for (let i = 1; i < screenBuffer.width * screenBuffer.height; ++i) {
+            screenBuffer.data.set([255, 255, 255, 255], i * 4);
         }
     }
     Renderer.init = init;
@@ -30,11 +27,39 @@ export var Renderer;
     Renderer.drawLine = drawLine;
     function drawPixel(x, y) {
         const idx = y * canvas.width + x;
-        for (let i = 0; i < 3; ++i) {
-            screenBuffer.data[idx * 4 + i] = Math.random() * 255;
+        switch (Options.renderColors) {
+            case Options.RenderColors.BlackAndWhite:
+                renderBlackAndWhite(idx);
+                break;
+            case Options.RenderColors.RedAndBlue:
+                renderRedAndBlue(idx);
+                break;
+            case Options.RenderColors.RedAndGreen:
+                renderRedAndGreen(idx);
+                break;
+            case Options.RenderColors.RGB:
+                renderRGB(idx);
+                break;
         }
     }
     Renderer.drawPixel = drawPixel;
+    function renderBlackAndWhite(idx) {
+        const isWhite = screenBuffer.data[idx * 4] == 255;
+        for (let i = 0; i < 3; ++i) {
+            screenBuffer.data[idx * 4 + i] = isWhite ? 0 : 255;
+        }
+    }
+    function renderRedAndBlue(idx) {
+        const colorOffset = screenBuffer.data[idx * 4 + 2] == 255 ? 1 : 0;
+        screenBuffer.data.set([255 * colorOffset, 0, 255 * (1 - colorOffset)], idx * 4);
+    }
+    function renderRedAndGreen(idx) {
+        const colorOffset = screenBuffer.data[idx * 4] == 255 ? 1 : 0;
+        screenBuffer.data.set([255 * (1 - colorOffset), 255 * colorOffset, 0], idx * 4);
+    }
+    function renderRGB(idx) {
+        screenBuffer.data.set([Math.random() * 255, Math.random() * 255, Math.random() * 255], idx * 4);
+    }
     function renderScreenBuffer() {
         ctx.putImageData(screenBuffer, 0, 0);
     }

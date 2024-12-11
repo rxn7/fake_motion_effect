@@ -1,28 +1,24 @@
 import Cube from './cube.js';
 import { canvas, ctx } from './global.js';
+import { Options } from './options.js';
 import { Renderer } from './renderer.js';
-let freeze = false;
-let lastFrameTime;
+let playing = true;
+let lastFrameTime = 0;
 const cube = new Cube({ x: 128, y: 128 }, 128);
 function init() {
+    Options.init();
     Renderer.init();
-    setInterval(update, 1000 / 60);
+    requestAnimationFrame(update);
 }
 function update(time) {
-    const deltaTime = (time - lastFrameTime) * 1000;
+    requestAnimationFrame(update);
+    const deltaTime = (time - lastFrameTime);
     lastFrameTime = time;
-    if (!freeze) {
+    if (Options.isPlaying) {
+        cube.rotateSpeed = Options.speed;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        cube.render();
+        cube.render(deltaTime);
         Renderer.render();
     }
 }
-window.addEventListener('keypress', (e) => {
-    if (e.key == ' ') {
-        freeze = !freeze;
-    }
-});
-window.addEventListener('mousedown', (e) => {
-    freeze = !freeze;
-});
 init();

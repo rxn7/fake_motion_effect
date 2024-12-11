@@ -5,6 +5,7 @@ export default class Cube {
         this.origin = origin;
         this.size = size;
         this.rotate = rotate;
+        this.rotateSpeed = 0.05;
         this.vertices = new Array(8);
         this.centroid = new Vector3();
         this.connections = [
@@ -24,13 +25,14 @@ export default class Cube {
         this.initVertices();
         this.updateCentroid();
     }
-    render() {
+    render(deltaTime) {
         this.updateCentroid();
         for (const vertex of this.vertices) {
             vertex[0] -= this.centroid[0];
             vertex[1] -= this.centroid[1];
             vertex[2] -= this.centroid[2];
-            vertex.rotate(this.rotate[0], this.rotate[1], this.rotate[2]);
+            const speed = this.rotateSpeed * deltaTime;
+            vertex.rotate(this.rotate[0] * speed, this.rotate[1] * speed, this.rotate[2] * speed);
             vertex[0] += this.centroid[0];
             vertex[1] += this.centroid[1];
             vertex[2] += this.centroid[2];
