@@ -1,11 +1,13 @@
-import Cube from './cube.js'
 import { canvas, ctx } from './global.js'
-import { Options } from './options.js'
+import { Options, ShapeOption } from './options.js'
 import { Renderer } from './renderer.js'
+import { Shape } from './shape.js'
+import Pyramid from './shapes/pyramid.js'
+import Cube from './shapes/cube.js'
+import Cylinder from './shapes/cylinder.js'
 
-let playing: boolean = true
 let lastFrameTime: DOMHighResTimeStamp = 0
-const cube = new Cube({ x: 128, y: 128 }, 128)
+let shape: Shape = new Cube({ x: 128, y: 128 }, 128)
 
 function init(): void {
 	Options.init()
@@ -20,11 +22,28 @@ function update(time: DOMHighResTimeStamp): void {
 	lastFrameTime = time
 
 	if(Options.isPlaying) {
-		cube.rotateSpeed = Options.speed
+		Renderer.begin()
 
+		shape.rotateSpeed = Options.speed
 		ctx.clearRect(0, 0, canvas.width, canvas.height)
-		cube.render(deltaTime)
+		shape.render(deltaTime)
 		Renderer.render()
+	}
+}
+
+export function changeShape(option: ShapeOption): void {
+	switch(option) {
+		case ShapeOption.Cube:
+			shape = new Cube({ x: 128, y: 128 }, 128)
+			break
+
+		case ShapeOption.Pyramid:
+			shape = new Pyramid({ x: 128, y: 128 }, 128)
+			break
+
+		case ShapeOption.Cylinder:
+			shape = new Cylinder({ x: 128, y: 128 })
+			break
 	}
 }
 

@@ -1,5 +1,5 @@
 import { canvas, ctx } from './global.js'
-import { Options } from './options.js'
+import { RenderColors, Options } from './options.js'
 
 export namespace Renderer {
 	const screenBuffer: ImageData = ctx.createImageData(canvas.width, canvas.height)
@@ -12,6 +12,12 @@ export namespace Renderer {
 
 	export function render(): void {
 		renderScreenBuffer()
+	}
+
+	export function begin(): void {
+		if(!Options.isEffectEnabled) {
+			screenBuffer.data.fill(255)
+		}
 	}
 
 	export function drawLine(x1: number, y1: number, x2: number, y2: number): void {
@@ -29,21 +35,26 @@ export namespace Renderer {
 	}
 
 	export function drawPixel(x: number, y: number): void {
+		if(x < 0 || x >= canvas.width || y < 0 || y >= canvas.height) {
+			console.warn("Tried to draw outside the canvas")
+			return
+		}
+
 		const idx: number = y * canvas.width + x
 		switch(Options.renderColors) {
-			case Options.RenderColors.BlackAndWhite:
+			case RenderColors.BlackAndWhite:
 				renderBlackAndWhite(idx)
 				break
 
-			case Options.RenderColors.RedAndBlue:
+			case RenderColors.RedAndBlue:
 				renderRedAndBlue(idx)
 				break
 
-			case Options.RenderColors.RedAndGreen:
+			case RenderColors.RedAndGreen:
 				renderRedAndGreen(idx)
 				break
 			
-			case Options.RenderColors.RGB:
+			case RenderColors.RGB:
 				renderRGB(idx)
 				break
 		}
